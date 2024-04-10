@@ -16,4 +16,4 @@ jobs:
           server: ${{ secrets.FTP_AQUA_SERVER }}
           username: ${{ secrets.FTP_AQUA_USER }}
           password: ${{ secrets.FTP_AQUA_PASSWORD }}
-          server-dir: ./public_html
+          server-dir: ./public_html/
