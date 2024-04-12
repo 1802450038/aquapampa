@@ -67,7 +67,9 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    // 'timezone' => 'UTC',
+    // 'timezone' => 'America/Sao_Paulo',
+    'timezone' => date_default_timezone_get(),
 
     /*
     |--------------------------------------------------------------------------

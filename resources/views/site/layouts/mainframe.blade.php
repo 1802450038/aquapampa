@@ -19,7 +19,7 @@
 
 @include('site._partials.topo')
 @yield('content')
-@include('site._partials.footer')
+{{-- @include('site._partials.footer') --}}
 
 
 

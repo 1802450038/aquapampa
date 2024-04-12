@@ -1,4 +1,3 @@
-let liveUpdate = true;
 // --primary-l : #73a3fa;
 // --primary : #6095f7;
 // --primary-d : #3377f7;
@@ -16,34 +15,39 @@ function loadDate() {
   let dateForm = document.getElementById("date-log");
   let hourStartForm = document.getElementById("hour-log-start");
   let hourEndForm = document.getElementById("hour-log-end");
-  const DateLocale = new Date().toLocaleString("pt-BR").split(", ");
-  const DateDay = DateLocale[0].split("/").reverse();
-  const DateTime = DateLocale[1].split(":");
+
+  let DateLocale = new Date().toLocaleString("pt-BR").split(" ");
+
+  let DateDay = DateLocale[0].split("/").reverse();
+  let DateTime = DateLocale[1].split(":");
+
   dateForm.value = DateDay[0] + "-" + DateDay[1] + "-" + DateDay[2];
 
   if (DateTime[0] < 3) {
     hourStartForm.value = "00" + ":" + "00";
-    hourEndForm.value = DateTime[0] + ":" + DateTime[1];
+  } else if (DateTime[0] < 13) {
+    hourStartForm.value = "0" + (DateTime[0] - 3) + ":" + DateTime[1];
   } else {
     hourStartForm.value = DateTime[0] - 3 + ":" + DateTime[1];
-    hourEndForm.value = DateTime[0] + ":" + DateTime[1];
   }
 
+  hourEndForm.value = DateTime[0] + ":" + DateTime[1];
   return DateTime + " " + DateDay;
 }
 loadDate();
 
-const ctx = document.getElementById("myChart");
+// DOM VARIABLES
 let last_response;
-let labels_graph = [];
-let data_graph = [];
-let api_key = "tPmAT5Ab3j7F9";
-let sensor = $("#sensor").val();
-let date_log = $("#date-log").val();
-let hour_log_start = $("#hour-log-start").val();
-let hour_log_end = $("#hour-log-end").val();
-let quantity = calcTimeDiffMin(hour_log_start, hour_log_end);
+let last_sensor;
+let form_sensor = $("#sensor").val();
+let form_date_log = $("#date-log").val();
+let form_hour_start = $("#hour-log-start").val();
+let form_hour_end = $("#hour-log-end").val();
+let form_quantity = calcTimeDiffMin(form_hour_start, form_hour_end);
+let liveUpdate = true;
 
+// CHART
+const ctx = document.getElementById("myChart");
 chart = new Chart(ctx, {
   type: "line",
   data: {
@@ -65,6 +69,7 @@ chart = new Chart(ctx, {
   },
 });
 
+// SLIDER
 $("#slider-level").roundSlider({
   sliderType: "min-range",
   circleShape: "pie",
@@ -127,7 +132,7 @@ $("#slider-relay").roundSlider({
   borderWidth: 0,
   startValue: 0,
   rangeColor: "#e65744",
-  tooltipColor: "#a1a1a1"
+  tooltipColor: "#a1a1a1",
 });
 
 $("#slider-temp").roundSlider({
@@ -144,22 +149,16 @@ $("#slider-temp").roundSlider({
   borderWidth: 0,
   startValue: 0,
   rangeColor: "#e65744",
-  tooltipColor: "#a1a1a1"
+  tooltipColor: "#a1a1a1",
   // valueChange: function (e) {
   //   var color = e.value > e.options["max"] / 2 ? "#e65744" : "#3377f7";
   //   $("#slider-temp").roundSlider({ rangeColor: color, tooltipColor: color });
   // },
 });
-
 var sliderPh = $("#slider-ph").data("roundSlider");
 var sliderLevel = $("#slider-level").data("roundSlider");
 var sliderRelay = $("#slider-relay").data("roundSlider");
 var sliderTemp = $("#slider-temp").data("roundSlider");
-
-sliderPh.setValue(7);
-sliderLevel.setValue(75);
-sliderRelay.setValue(1);
-sliderTemp.setValue(23);
 
 function toggleFloating(elem) {
   if (elem.parentElement.parentElement.classList.contains("active")) {
@@ -170,92 +169,88 @@ function toggleFloating(elem) {
 }
 
 function getSubField(value, icon) {
-  return (
-    // "<span class='log-value'>" + value + " <i class='" + icon + "'></i></span>"
-    "<span class='log-value'>" + value + " "
-  );
+  return "<span class='log-value'><i>" + icon + "</i> " + value + "</span>";
 }
 
-function appendResult(response) {
+function dateParse(date) {
+  var date = new Date(date).toLocaleString("pt-BR");
+  return date.split(" ");
+}
+
+function appendResult(data, sensor) {
   let resultsHtml = document.getElementById("last-logs");
-  let result = response.split("|");
+  resultsHtml.innerHTML = "";
+  chart.data.datasets[0].data = [];
+  chart.data.labels = [];
+  last_response = data[0].id;
+  sliderPh.setValue(data[0].ph_value);
+  sliderLevel.setValue(data[0].level_value);
+  sliderRelay.setValue(data[0].relay_value);
+  sliderTemp.setValue(data[0].temp_value);
 
-  if (JSON.parse(result[0]).id != last_response) {
-    
-    last_response = JSON.parse(result[0]).id;    
-    console.log(last_response);
-
-    sliderPh.setValue(JSON.parse(result[0]).ph_value);
-    sliderLevel.setValue(JSON.parse(result[0]).level_value);
-    sliderRelay.setValue(JSON.parse(result[0]).relay_value);
-    sliderTemp.setValue(JSON.parse(result[0]).temp_value);
-    resultsHtml.innerHTML = "";
-    data_graph = [];
-    labels_graph = [];
-    result.forEach((res) => {
-      if (res.length > 3) {
-        let finalResult = JSON.parse(res);
-        labels_graph.push(
-          finalResult.date.split(" ")[1].split(":")[0] +
-            ":" +
-            finalResult.date.split(" ")[1].split(":")[1]
-        );
-
-        if (sensor == "relay") {
-          data_graph.push(finalResult.relay_value);
-        } else if (sensor == "temp") {
-          data_graph.push(finalResult.temp_value);
-        } else if (sensor == "ph") {
-          data_graph.push(finalResult.ph_value);
-        } else if (sensor == "level") {
-          data_graph.push(finalResult.level_value);
-        }
-        resultsHtml.innerHTML +=
-          "<li class='log-content'>" +
-          getSubField(finalResult.id, "fas fa-barcode") +
-          getSubField(finalResult.ph_value, "fas fa-ruler") +
-          getSubField(finalResult.temp_value, "fas fa-ruler") +
-          getSubField(finalResult.level_value, "fas fa-ruler") +
-          getSubField(finalResult.realy_value, "fas fa-ruler") +
-          getSubField(finalResult.date, "fas fa-calendar");
-        ("</li>");
-      }
-    });
-    chart.data.datasets[0].data = data_graph.reverse();
-    chart.data.labels = labels_graph.reverse();
-    chart.data.datasets[0].label = getLabelAndColor(sensor)[0];
-    chart.data.datasets[0].backgroundColor = getLabelAndColor(sensor)[1];
-    chart.data.datasets[0].borderColor = getLabelAndColor(sensor)[2];
-    console.log("Something new");
-  } else {
-    console.log("Old data");
-  }
+  data.reverse();
+  
+  data.forEach((element) => {
+    resultsHtml.innerHTML +=
+      "<li class='log-content'>" +
+      getSubField(element.id, "ID") +
+      getSubField(element.ph_value, "PH") +
+      getSubField(element.temp_value, "Temp") +
+      getSubField(element.level_value, "Level") +
+      getSubField(element.relay_value, "Relay") +
+      getSubField(
+        dateParse(element.created_at)[0] +
+          " " +
+          dateParse(element.created_at)[1],
+        "Date"
+      );
+    ("</li>");
+    chart.data.datasets[0].data.push(element[sensor + "_value"]);
+    chart.data.labels.push(dateParse(element.created_at)[1]);
+  });
+  chart.data.datasets[0].label = getLabelAndColor(sensor)[0];
+  chart.data.datasets[0].backgroundColor = getLabelAndColor(sensor)[1];
+  chart.data.datasets[0].borderColor = getLabelAndColor(sensor)[2];
 }
 
-function sendRequest(function_name) {
-  var urlData =
-    "&api_key=" +
-    api_key +
-    "&function_name=" +
-    function_name +
-    "&sensor=" +
-    sensor +
-    "&date-log=" +
-    date_log +
-    "&hour-log-start=" +
-    hour_log_start +
-    "&hour-log-end=" +
-    hour_log_end +
-    "&quantity=" +
-    quantity;
+function appendResultHistory(data,sensor){
+  let resultsHtml = document.getElementById("last-logs");
+  resultsHtml.innerHTML = "";
+  chart.data.datasets[0].data = [];
+  chart.data.labels = [];
 
+  data.reverse();
+  
+  data.forEach((element) => {
+    resultsHtml.innerHTML +=
+      "<li class='log-content'>" +
+      getSubField(element.id, "ID") +
+      getSubField(element[sensor + "_value"], getLabelAndColor(sensor)[0]) +
+      getSubField(
+        dateParse(element.created_at)[0] +
+          " " +
+          dateParse(element.created_at)[1],
+        "Date"
+      );
+    ("</li>");
+    chart.data.datasets[0].data.push(element[sensor + "_value"]);
+    chart.data.labels.push(dateParse(element.created_at)[1]);
+  });
+  chart.data.datasets[0].label = getLabelAndColor(sensor)[0];
+  chart.data.datasets[0].backgroundColor = getLabelAndColor(sensor)[1];
+  chart.data.datasets[0].borderColor = getLabelAndColor(sensor)[2];
+}
+
+function getData(board_id, key, sensor) {
   $.ajax({
-    type: "POST" /* tipo post */,
-    url: "http://177.36.44.91/aquatest/read_logs_new.php" /* endereço do script PHP */,
+    type: "GET",
+    url: "http://localhost:8000/getlog/" + board_id + "/" + key,
     async: true,
-    data: urlData /* informa Url */,
     success: function (data) {
-      appendResult(data);
+      if (data.reverse()[0].id != last_response || sensor != last_sensor) {
+        appendResult(data, sensor);
+        last_sensor = sensor;
+      }
     },
     beforeSend: function () {},
     complete: function () {
@@ -266,6 +261,67 @@ function sendRequest(function_name) {
     },
   });
 }
+
+function getDataByParams(
+  board_id,
+  key,
+  sensor,
+  date_log,
+  hour_start,
+  hour_end,
+  quantity
+) {
+  $.ajax({
+    type: "GET",
+    url:
+      "http://localhost:8000/getlog/" +
+      board_id +
+      "/" +
+      key +
+      "/" +
+      sensor +
+      "/" +
+      encodeURIComponent(date_log) +
+      "/" +
+      encodeURIComponent(hour_start) +
+      "/" +
+      encodeURIComponent(hour_end) +
+      "/" +
+      quantity,
+    async: true,
+    success: function (data) {
+      console.log(data);
+      appendResultHistory(data.reverse(),sensor)
+    },
+    beforeSend: function () {},
+    complete: function () {
+      chart.update();
+    },
+    fail: function () {
+      console.log("Falha");
+    },
+  });
+}
+
+
+function sendFake() {
+  $.ajax({
+    type: "GET",
+    url:
+      "http://localhost:8000/sendlog/1" ,
+    async: true,
+    success: function (data) {
+    },
+    beforeSend: function () {},
+    complete: function () {
+    },
+    fail: function () {
+      console.log("Falha");
+    },
+  });
+}
+
+
 
 function hourToMinutes(hour) {
   return parseInt(hour.split(":")[0] * 60) + parseInt(hour.split(":")[1]);
@@ -299,27 +355,13 @@ function getLabelAndColor(sensor) {
   }
 }
 
-
-
 function loadValuesFromForm() {
-  sensor = $("#sensor").val();
-  date_log = $("#date-log").val();
-  hour_log_start = $("#hour-log-start").val();
-  hour_log_end = $("#hour-log-end").val();
-  quantity = calcTimeDiffMin(hour_log_start, hour_log_end);
+  form_sensor = $("#sensor").val();
+  form_date_log = $("#date-log").val();
+  form_hour_start = $("#hour-log-start").val();
+  form_hour_end = $("#hour-log-end").val();
+  form_quantity = calcTimeDiffMin(form_hour_start, form_hour_end);
 }
-
-$(document).ready(function () {
-  $("#send-log").click(function () {
-    loadValuesFromForm();
-    if (calcTimeDiffHour(hour_log_start, hour_log_end) > 6) {
-      alert("O intervalo de horas não pode ser maior que 6 Horas");
-      return false;
-    } else {
-      sendRequest("getLogParam");
-    }
-  });
-});
 
 function toggleLiveUpdate() {
   $("#auto-update").toggleClass("inactive");
@@ -327,15 +369,41 @@ function toggleLiveUpdate() {
 }
 
 function disableLiveUpdate() {
-  console.log("From disable");
   $("#auto-update").addClass("inactive");
+  console.log("disable");
   liveUpdate = false;
 }
+
+$(document).ready(function () {
+  $("#send-log").click(function () {
+    loadValuesFromForm();
+    if (calcTimeDiffHour(form_hour_start, form_hour_end) > 6) {
+      alert("O intervalo de horas não pode ser maior que 6 Horas");
+      return false;
+    } else {
+      getDataByParams(
+        1,
+        "teste",
+        form_sensor,
+        form_date_log,
+        form_hour_start,
+        form_hour_end,
+        form_quantity
+      );
+      disableLiveUpdate();
+    }
+  });
+
+});
+
 $(document).ready(function () {
   $("#hour-log-start").click(function () {
     disableLiveUpdate();
   });
   $("#hour-log-end").click(function () {
+    disableLiveUpdate();
+  });
+  $("#date-log").click(function () {
     disableLiveUpdate();
   });
 });
@@ -348,12 +416,15 @@ $(document).ready(function () {
 
 setInterval(function () {
   if (liveUpdate == true) {
-    loadDate();  
+    loadDate();
     loadValuesFromForm();
-    sendRequest("getLogParam");
+    getData(1,'teste',form_sensor);
+    sendFake();
   } else {
-    loadValuesFromForm();
+    // loadValuesFromForm();
   }
 }, 5000);
 
-window.onload = sendRequest("getLogParam");
+// window.onload = sendRequest("getLogParam");
+
+getData(1, "teste", "temp");
