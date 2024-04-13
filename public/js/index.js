@@ -188,7 +188,7 @@ function appendResult(data, sensor) {
   sliderRelay.setValue(data[0].relay_value);
   sliderTemp.setValue(data[0].temp_value);
 
-  data.reverse();
+  // data.reverse();
   
   data.forEach((element) => {
     resultsHtml.innerHTML +=
@@ -291,7 +291,7 @@ function getDataByParams(
       quantity,
     async: true,
     success: function (data) {
-      console.log(data);
+      // console.log(data);
       appendResultHistory(data.reverse(),sensor)
     },
     beforeSend: function () {},
@@ -420,10 +420,10 @@ setInterval(function () {
     loadDate();
     loadValuesFromForm();
     getData(1,'teste',form_sensor);
-    sendFake();
   } else {
     // loadValuesFromForm();
   }
+  sendFake();
 }, 5000);
 
 // window.onload = sendRequest("getLogParam");

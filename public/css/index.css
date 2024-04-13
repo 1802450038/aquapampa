@@ -578,3 +578,23 @@ select {
     background-color: var(--primary-d);
     height: 50px;
 }
+
+/* CSS media query dentro de um stylesheet */
+@media (max-width: 1024px) {
+   .body {
+    background-color: red;
+   }
+
+   .row {
+    flex-wrap: wrap;
+    justify-content: center;
+   }
+
+   .col-25 {
+    width: 45%;
+   }
+
+   .col-100 {
+    flex-wrap: wrap;
+   }
+  }
