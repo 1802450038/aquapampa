@@ -582,7 +582,14 @@ select {
 /* CSS media query dentro de um stylesheet */
 @media (max-width: 1024px) {
    .body {
-    background-color: red;
+    /* background-color: red; */
+   }
+
+   .body-content {
+    width: 100%;
+
+    /* background-color: magenta; */
+    padding: 0;
    }
 
    .row {
@@ -594,7 +601,43 @@ select {
     width: 45%;
    }
 
-   .col-100 {
-    flex-wrap: wrap;
+   .card-title {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
    }
+
+   .card-options {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+   }
+
+    .card-options #log-options {
+        display: flex; 
+        flex-wrap: wrap;
+        width: 100%;
+        row-gap: 20px;
+        justify-content: space-between;
+        column-gap: 0;
+        margin: 0;
+        padding: 0;
+    }
+
+    .card-options #log-options .input-group {
+        display: flex;
+        width: 100%;
+        padding: 0;
+        margin: 0;
+        column-gap: 10px;
+    }
+
+    .card-options #log-options>.input-group:nth-child(3), 
+    .card-options #log-options>.input-group:nth-child(4), 
+    .card-options #log-options>.input-group:nth-child(5), 
+    .card-options #log-options>.input-group:nth-child(6) 
+    {
+        width: 49%;
+    }
+   
   }

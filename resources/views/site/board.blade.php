@@ -68,6 +68,7 @@
                             <h4>Logs</h4>
                             <div class="card-options">
                                 <form method="post" class="inline-form" name="log-options" id="log-options">
+                                   
                                     <div class="input-group">
                                         <div class="custom-select">
                                             <label for="sensor">Sensor</label>
@@ -84,10 +85,12 @@
                                         <label for="date-log">Data</label>
                                         <input name="date-log" id="date-log" type="date">
                                     </div>
+
                                     <div class="input-group">
                                         <label for="hour-log-start">Hora inicio</label>
                                         <input name="hour-log-start" id="hour-log-start" type="time" value="12:00">
                                     </div>
+
                                     <div class="input-group">
                                         <label for="hour-log-end">Hora final</label>
                                         <input name="hour-log-end" id="hour-log-end" type="time" value="13:00">
@@ -96,9 +99,11 @@
                                     <div class="input-group">
                                         <button id="send-log" type="button"> <i class="fas fa-arrow-right"></i></button>
                                     </div>
+                                    
                                     <div class="input-group">
                                         <button id="auto-update" type="button" class="green"> <i class="fas fa-arrow-rotate-right"></i></button>
                                     </div>
+
                                 </form>
                             </div>
                         </div>
