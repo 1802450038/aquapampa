@@ -42,7 +42,7 @@ class DataBoardController extends Controller
     function getDataLog(int $id, string $key)
     {
         if ($key == $this->api_key) {
-            $result = DataBoard::where('board_id', 1)->skip(0)->take(10)->getModels();
+            $result = DataBoard::where('board_id', 1)->skip(0)->take(20)->orderBy('id','desc')->getModels();
             return $result;
         } else {
             return "";
