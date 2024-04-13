@@ -250,6 +250,7 @@ function getData(board_id, key, sensor) {
       if (data.reverse()[0].id != last_response || sensor != last_sensor) {
         appendResult(data, sensor);
         last_sensor = sensor;
+        console.log(data);
       }
     },
     beforeSend: function () {},
