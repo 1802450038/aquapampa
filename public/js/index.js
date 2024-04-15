@@ -424,9 +424,9 @@ setInterval(function () {
     loadValuesFromForm();
     getData(1,'teste',form_sensor);
   } else {
-    // loadValuesFromForm();
+    loadValuesFromForm();
   }
-  // sendFake();
+  sendFake();
 }, 5000);
 
 // window.onload = sendRequest("getLogParam");
