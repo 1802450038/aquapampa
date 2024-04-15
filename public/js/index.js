@@ -244,7 +244,8 @@ function appendResultHistory(data,sensor){
 function getData(board_id, key, sensor) {
   $.ajax({
     type: "GET",
-    url: "http://localhost:8000/getlog/" + board_id + "/" + key,
+    // url: "http://localhost:8000/getlog/" + board_id + "/" + key,
+    url: "https://gabrielbellagamba.com/getlog/" + board_id + "/" + key,
     async: true,
     success: function (data) {
       if (data.reverse()[0].id != last_response || sensor != last_sensor) {
@@ -275,7 +276,8 @@ function getDataByParams(
   $.ajax({
     type: "GET",
     url:
-      "http://localhost:8000/getlog/" +
+      // "http://gabrielbellaga:8000/getlog/" +
+      "https://gabrielbellagamba.com/getlog/" +
       board_id +
       "/" +
       key +
@@ -309,7 +311,8 @@ function sendFake() {
   $.ajax({
     type: "GET",
     url:
-      "http://localhost:8000/sendlog/1" ,
+      // "http://localhost:8000/sendlog/1" ,
+      "https://gabrielbellagamba.com/sendlog/1" ,
     async: true,
     success: function (data) {
     },
@@ -415,17 +418,17 @@ $(document).ready(function () {
   });
 });
 
-// setInterval(function () {
-//   if (liveUpdate == true) {
-//     loadDate();
-//     loadValuesFromForm();
-//     getData(1,'teste',form_sensor);
-//   } else {
-//     // loadValuesFromForm();
-//   }
-//   // sendFake();
-// }, 5000);
+setInterval(function () {
+  if (liveUpdate == true) {
+    loadDate();
+    loadValuesFromForm();
+    getData(1,'teste',form_sensor);
+  } else {
+    // loadValuesFromForm();
+  }
+  // sendFake();
+}, 5000);
 
-// window.onload = sendRequest("getLogParam");
+window.onload = sendRequest("getLogParam");
 
-// getData(1, "teste", "temp");
+getData(1, "teste", "temp");
