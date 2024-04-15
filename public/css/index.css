@@ -27,6 +27,7 @@
 /* width */
 ::-webkit-scrollbar {
     width: 5px;
+    border-radius: 10px;
 }
 
 /* Track */
@@ -37,13 +38,17 @@
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-    background: var(--primary-l)
+    background: var(--primary-l);
+    border-radius: 10px;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
     background: var(--primary-d);
+    border-radius: 10px;
 }
+
+
 
 body {
     /* position: absolute; */
@@ -541,6 +546,7 @@ select {
     left: 50%;
     transform: translate(-50%, 0%);
     padding-bottom: 20px;
+    flex-direction: column-reverse;
 }
 
 .last-logs li {
@@ -565,6 +571,14 @@ select {
     color: var(--primary-d);
 }
 
+.graph-container {
+    /* background-color: red; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
 .graph-body {
     width: calc(100% - 40px);
     display: flex;
@@ -581,14 +595,9 @@ select {
 
 /* CSS media query dentro de um stylesheet */
 @media (max-width: 1024px) {
-    .body {
-        /* background-color: red; */
-    }
 
     .body-content {
         width: 100%;
-
-        /* background-color: magenta; */
         padding: 0;
     }
 
@@ -621,7 +630,6 @@ select {
         justify-content: space-between;
         column-gap: 0;
         margin: 0;
-        /* padding: 0; */
     }
 
     .card-options #log-options .input-group {
@@ -640,8 +648,58 @@ select {
     .card-options #log-options>.input-group:nth-child(4),
     .card-options #log-options>.input-group:nth-child(5),
     .card-options #log-options>.input-group:nth-child(6) {
-        width: 49%;
-        background-color: red;
+        width: 49% !important;
     }
 
+    .last-logs>li {
+        padding: 5px 0px;
+    }
+    .last-logs>li>span {
+        display: flex;
+        flex-direction: column;
+        row-gap: 5px;
+        justify-content: center;
+        align-items: center;
+        font-size: .8rem;
+    }
+    .last-logs>li>span>i{
+        font-size: .7rem;
+    }
+
+
+    .row.graph .card {
+        display: flex;
+    }
+    
+    .row.graph .card .graph-container{
+        display: flex;
+        /* justify-content: center; */
+        align-items: flex-start;
+        justify-content: flex-start;
+        overflow-y: auto;
+    }
+    .graph-body {
+        display: flex;
+        align-items: flex-start;
+        min-width: 800px;
+        overflow-y: auto;
+    }
+
+    ::-webkit-scrollbar:horizontal{
+        display: none;
+        width: 1px;
+        height: 1px;
+    }
+
+    ::-webkit-scrollbar-thumb:horizontal{
+        height: 1px !important;
+        width: 1px !important;
+    }
+
+    ::-webkit-scrollbar-track:horizontal {
+        background: transparent;
+        border-radius: 10px;
+        height: 1px !important;
+        width: 1px !important;
+    }
 }

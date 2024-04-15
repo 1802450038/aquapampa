@@ -37,6 +37,8 @@ function loadDate() {
 loadDate();
 
 // DOM VARIABLES
+// let url = "https://gabrielbellagamba.com/"
+let url = "http://localhost:8000/";
 let last_response;
 let last_sensor;
 let form_sensor = $("#sensor").val();
@@ -189,7 +191,7 @@ function appendResult(data, sensor) {
   sliderTemp.setValue(data[0].temp_value);
 
   // data.reverse();
-  
+
   data.forEach((element) => {
     resultsHtml.innerHTML +=
       "<li class='log-content'>" +
@@ -213,14 +215,14 @@ function appendResult(data, sensor) {
   chart.data.datasets[0].borderColor = getLabelAndColor(sensor)[2];
 }
 
-function appendResultHistory(data,sensor){
+function appendResultHistory(data, sensor) {
   let resultsHtml = document.getElementById("last-logs");
   resultsHtml.innerHTML = "";
   chart.data.datasets[0].data = [];
   chart.data.labels = [];
 
-  data.reverse();
-  
+  // data.reverse();
+
   data.forEach((element) => {
     resultsHtml.innerHTML +=
       "<li class='log-content'>" +
@@ -244,14 +246,12 @@ function appendResultHistory(data,sensor){
 function getData(board_id, key, sensor) {
   $.ajax({
     type: "GET",
-    // url: "http://localhost:8000/getlog/" + board_id + "/" + key,
-    url: "https://gabrielbellagamba.com/getlog/" + board_id + "/" + key,
+    url: url + "getlog/" + board_id + "/" + key,
     async: true,
     success: function (data) {
       if (data.reverse()[0].id != last_response || sensor != last_sensor) {
         appendResult(data, sensor);
         last_sensor = sensor;
-        console.log(data);
       }
     },
     beforeSend: function () {},
@@ -276,8 +276,8 @@ function getDataByParams(
   $.ajax({
     type: "GET",
     url:
-      // "http://gabrielbellaga:8000/getlog/" +
-      "https://gabrielbellagamba.com/getlog/" +
+      url +
+      "getlog/" +
       board_id +
       "/" +
       key +
@@ -294,7 +294,7 @@ function getDataByParams(
     async: true,
     success: function (data) {
       // console.log(data);
-      appendResultHistory(data.reverse(),sensor)
+      appendResultHistory(data.reverse(), sensor);
     },
     beforeSend: function () {},
     complete: function () {
@@ -306,26 +306,19 @@ function getDataByParams(
   });
 }
 
-
 function sendFake() {
   $.ajax({
     type: "GET",
-    url:
-      // "http://localhost:8000/sendlog/1" ,
-      "https://gabrielbellagamba.com/sendlog/1" ,
+    url: url + "sendlog/1",
     async: true,
-    success: function (data) {
-    },
+    success: function (data) {},
     beforeSend: function () {},
-    complete: function () {
-    },
+    complete: function () {},
     fail: function () {
       console.log("Falha");
     },
   });
 }
-
-
 
 function hourToMinutes(hour) {
   return parseInt(hour.split(":")[0] * 60) + parseInt(hour.split(":")[1]);
@@ -374,7 +367,7 @@ function toggleLiveUpdate() {
 
 function disableLiveUpdate() {
   $("#auto-update").addClass("inactive");
-  console.log("disable");
+  // console.log("disable");
   liveUpdate = false;
 }
 
@@ -397,7 +390,6 @@ $(document).ready(function () {
       disableLiveUpdate();
     }
   });
-
 });
 
 $(document).ready(function () {
@@ -422,7 +414,7 @@ setInterval(function () {
   if (liveUpdate == true) {
     loadDate();
     loadValuesFromForm();
-    getData(1,'teste',form_sensor);
+    getData(1, "teste", form_sensor);
   } else {
     loadValuesFromForm();
   }
@@ -430,5 +422,5 @@ setInterval(function () {
 }, 5000);
 
 // window.onload = sendRequest("getLogParam");
-
+// sendFake();
 getData(1, "teste", "temp");
