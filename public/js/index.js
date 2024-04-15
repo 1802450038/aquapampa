@@ -429,6 +429,6 @@ setInterval(function () {
   // sendFake();
 }, 5000);
 
-window.onload = sendRequest("getLogParam");
+// window.onload = sendRequest("getLogParam");
 
 getData(1, "teste", "temp");
