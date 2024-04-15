@@ -37,8 +37,8 @@ function loadDate() {
 loadDate();
 
 // DOM VARIABLES
-// let url = "https://gabrielbellagamba.com/"
-let url = "http://localhost:8000/";
+let url = "https://gabrielbellagamba.com/"
+// let url = "http://localhost:8000/";
 let last_response;
 let last_sensor;
 let form_sensor = $("#sensor").val();
@@ -418,7 +418,7 @@ setInterval(function () {
   } else {
     loadValuesFromForm();
   }
-  sendFake();
+  // sendFake();
 }, 5000);
 
 // window.onload = sendRequest("getLogParam");
