@@ -10,7 +10,7 @@
     --shadow-l: 10px 10px 10px rgba(185, 185, 185, 0.13), -5px -5px 10px rgba(196, 196, 196, 0.048);
     --shadow: 10px 10px 10px rgba(143, 143, 143, 0.13), -5px -5px 10px rgba(143, 143, 143, 0.048);
     --shadow-d: 10px 10px 10px rgba(58, 58, 58, 0.13), -5px -5px 10px rgba(56, 56, 56, 0.048);
-    
+
     --red-l: #fa7373;
     --red: #f76060;
     --red-d: #f73333;
@@ -581,40 +581,40 @@ select {
 
 /* CSS media query dentro de um stylesheet */
 @media (max-width: 1024px) {
-   .body {
-    /* background-color: red; */
-   }
+    .body {
+        /* background-color: red; */
+    }
 
-   .body-content {
-    width: 100%;
+    .body-content {
+        width: 100%;
 
-    /* background-color: magenta; */
-    padding: 0;
-   }
+        /* background-color: magenta; */
+        padding: 0;
+    }
 
-   .row {
-    flex-wrap: wrap;
-    justify-content: center;
-   }
+    .row {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
 
-   .col-25 {
-    width: 45%;
-   }
+    .col-25 {
+        width: 45%;
+    }
 
-   .card-title {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-   }
+    .card-title {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+    }
 
-   .card-options {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-   }
+    .card-options {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+    }
 
     .card-options #log-options {
-        display: flex; 
+        display: flex;
         flex-wrap: wrap;
         width: 100%;
         row-gap: 20px;
@@ -632,12 +632,18 @@ select {
         column-gap: 10px;
     }
 
-    .card-options #log-options>.input-group:nth-child(3), 
-    .card-options #log-options>.input-group:nth-child(4), 
-    .card-options #log-options>.input-group:nth-child(5), 
-    .card-options #log-options>.input-group:nth-child(6) 
-    {
-        width: 49%;
+    .card-options #log-options>.input-group:nth-child(1),
+    .card-options #log-options>.input-group:nth-child(2) {
+        background-color: greenyellow;
+        width: 100% !important;
     }
-   
-  }
+
+    .card-options #log-options>.input-group:nth-child(3),
+    .card-options #log-options>.input-group:nth-child(4),
+    .card-options #log-options>.input-group:nth-child(5),
+    .card-options #log-options>.input-group:nth-child(6) {
+        width: 49%;
+        background-color: red;
+    }
+
+}

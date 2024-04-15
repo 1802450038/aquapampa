@@ -415,17 +415,17 @@ $(document).ready(function () {
   });
 });
 
-setInterval(function () {
-  if (liveUpdate == true) {
-    loadDate();
-    loadValuesFromForm();
-    getData(1,'teste',form_sensor);
-  } else {
-    // loadValuesFromForm();
-  }
-  sendFake();
-}, 5000);
+// setInterval(function () {
+//   if (liveUpdate == true) {
+//     loadDate();
+//     loadValuesFromForm();
+//     getData(1,'teste',form_sensor);
+//   } else {
+//     // loadValuesFromForm();
+//   }
+//   // sendFake();
+// }, 5000);
 
 // window.onload = sendRequest("getLogParam");
 
-getData(1, "teste", "temp");
+// getData(1, "teste", "temp");
